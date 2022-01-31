@@ -31,7 +31,6 @@
   font-size: 16px;
 }
 
-
 .input-range {
   min-width: 180px;
   margin-left: 0;
@@ -43,6 +42,7 @@
 .est-per-month-value {
   font-size: 20px;
   font-weight: 700;
+  margin-bottom: 0;
 }
 
 .btn-submit {
