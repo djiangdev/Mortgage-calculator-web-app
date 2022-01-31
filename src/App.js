@@ -9,7 +9,7 @@ export class App extends Component {
       purchase_price: 0,
       down_payment: 0,
       repayment_time: 5,
-      interest_rate: 1,
+      interest_rate: 0.5,
       loan_amount: '',
       estimated_per_month: ''
     }
@@ -30,14 +30,13 @@ export class App extends Component {
         loan_amount: this.state.purchase_price - this.state.down_payment
       },
       () => {
-        const a = Math.pow(
-          this.state.interest_rate * (1 + this.state.interest_rate),
-          this.state.repayment_time
-        )
-        const b =
-          Math.pow(1 + this.state.interest_rate, this.state.repayment_time) - 1
+        const rate = this.state.interest_rate * 0.01
+        const a =
+          (rate / 12) * (1 + rate / 12) ** (this.state.repayment_time * 12)
+        const b = (1 + rate / 12) ** (this.state.repayment_time * 12) - 1
+
         this.setState({
-          estimated_per_month: this.state.loan_amount * (a / b)
+          estimated_per_month: this.state.loan_amount * [a / b]
         })
       }
     )
@@ -128,9 +127,9 @@ export class App extends Component {
                 className='input-range'
                 type='range'
                 name='interest_rate'
-                min='1'
+                min='0.1'
                 max='10'
-                step='0.5'
+                step='0.1'
                 value={this.state.interest_rate}
                 onChange={this.onChange}
               />
