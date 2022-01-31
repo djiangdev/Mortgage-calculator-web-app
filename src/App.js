@@ -24,8 +24,7 @@ export class App extends Component {
     })
   }
 
-  getMortgageQuote (event) {
-    event.preventDefault()
+  getMortgageQuote () {
     this.setState(
       {
         loan_amount: this.state.purchase_price - this.state.down_payment
