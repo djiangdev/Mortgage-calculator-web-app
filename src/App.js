@@ -8,12 +8,13 @@ export class App extends Component {
     this.state = {
       purchase_price: 0,
       down_payment: 0,
-      repayment_time: 0,
-      interest_rate: 0,
-      loan_amount: 0,
-      estimated_per_month: 0
+      repayment_time: 5,
+      interest_rate: 1,
+      loan_amount: '',
+      estimated_per_month: ''
     }
     this.onChange = this.onChange.bind(this)
+    this.getMortgageQuote = this.getMortgageQuote.bind(this)
   }
 
   onChange (event) {
@@ -21,6 +22,26 @@ export class App extends Component {
     this.setState({
       [event.target.name]: event.target.value
     })
+  }
+
+  getMortgageQuote (event) {
+    event.preventDefault()
+    this.setState(
+      {
+        loan_amount: this.state.purchase_price - this.state.down_payment
+      },
+      () => {
+        const a = Math.pow(
+          this.state.interest_rate * (1 + this.state.interest_rate),
+          this.state.repayment_time
+        )
+        const b =
+          Math.pow(1 + this.state.interest_rate, this.state.repayment_time) - 1
+        this.setState({
+          estimated_per_month: this.state.loan_amount * (a / b)
+        })
+      }
+    )
   }
 
   render () {
@@ -32,12 +53,13 @@ export class App extends Component {
           <div id='App-options-list'>
             <div className='App-list-item'>
               <p className='title'>
-                Purchase price:
+                Purchase price:{' '}
                 <span className='price'>
                   <NumberFormat
                     value={this.state.purchase_price}
                     displayType={'text'}
                     thousandSeparator={true}
+                    decimalScale={2}
                     prefix={'$'}
                   />
                 </span>
@@ -62,6 +84,7 @@ export class App extends Component {
                     value={this.state.down_payment}
                     displayType={'text'}
                     thousandSeparator={true}
+                    decimalScale={2}
                     prefix={'$'}
                   />
                 </span>
@@ -71,7 +94,7 @@ export class App extends Component {
                 type='range'
                 name='down_payment'
                 min='0'
-                max='500000'
+                max='1000000'
                 step='1000'
                 value={this.state.down_payment}
                 onChange={this.onChange}
@@ -89,7 +112,7 @@ export class App extends Component {
                 className='input-range'
                 type='range'
                 name='repayment_time'
-                min='0'
+                min='1'
                 max='30'
                 step='1'
                 value={this.state.repayment_time}
@@ -106,9 +129,9 @@ export class App extends Component {
                 className='input-range'
                 type='range'
                 name='interest_rate'
-                min='0'
+                min='1'
                 max='10'
-                step='1'
+                step='0.5'
                 value={this.state.interest_rate}
                 onChange={this.onChange}
               />
@@ -121,6 +144,7 @@ export class App extends Component {
                   value={this.state.loan_amount}
                   displayType={'text'}
                   thousandSeparator={true}
+                  decimalScale={2}
                   prefix={'$'}
                 />
               </p>
@@ -133,13 +157,18 @@ export class App extends Component {
                   value={this.state.estimated_per_month}
                   displayType={'text'}
                   thousandSeparator={true}
+                  decimalScale={2}
                   prefix={'$'}
                 />
               </p>
             </div>
           </div>
 
-          <button type='button' className='btn btn-submit'>
+          <button
+            type='button'
+            className='btn btn-submit'
+            onClick={this.getMortgageQuote}
+          >
             Get a mortgage quote
           </button>
         </div>

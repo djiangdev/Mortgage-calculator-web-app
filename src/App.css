@@ -19,6 +19,7 @@
   display: inline-block;
   margin-right: 15px;
   min-width: 190px;
+  vertical-align: top;
 }
 
 .title {
@@ -30,9 +31,12 @@
   font-size: 16px;
 }
 
+
 .input-range {
   min-width: 180px;
   margin-left: 0;
+  -webkit-appearance: none;
+  border-radius: 20px;
 }
 
 .loan-amount-value,
@@ -48,4 +52,8 @@
   border: 0;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.btn-submit:hover {
+  box-shadow: 0 0 3px #000;
 }
